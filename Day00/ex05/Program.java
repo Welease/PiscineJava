@@ -3,15 +3,16 @@ import java.util.Scanner;
 public class Program {
 
     private final static int MAX_COUNT = 10;
+    private final static int DAY_IN_WEEK = 7;
 
     private final static String[] Days = {
-                "MO",
-                "TU",
-                "WE",
-                "TH",
-                "FR",
-                "SA",
-                "SU"
+            "MO",
+            "TU",
+            "WE",
+            "TH",
+            "FR",
+            "SA",
+            "SU"
     };
 
     public static void main(String[] args) {
@@ -24,8 +25,8 @@ public class Program {
 
         int[] times = new int[5];
         String [] days = new String[5];
-        int[] dates = new int[10];
-        int[] timesOfClasses = new int[10];
+        int[] dates = new int[MAX_COUNT];
+        int[] timesOfClasses = new int[MAX_COUNT];
         int count = scanClasses(scanner, times, days);
 
         sortDays(days, times, count);
@@ -38,17 +39,19 @@ public class Program {
     }
 
     private static int findInTimesOfClasses(int time, int day, int[] timesOfclasses, int[] dates) {
-        for (int i = 0; i < 10; ++i) {
-            if (time == timesOfclasses[i] && day == dates[i])
+        for (int i = 0; i < MAX_COUNT; ++i) {
+            if (time == timesOfclasses[i] && day == dates[i]) {
                 return i;
+            }
         }
         return -1;
     }
 
     private static int findInStudents(String name, String[] students) {
-        for (int i = 0; i < 10; ++i) {
-            if (name.equals(students[i]))
+        for (int i = 0; i < MAX_COUNT; ++i) {
+            if (name.equals(students[i])) {
                 return i;
+            }
         }
         return -1;
     }
@@ -59,21 +62,24 @@ public class Program {
         boolean here;
         for (;;) {
             input = scanner.next();
-            if (input.equals("."))
+            if (input.equals(".")) {
                 break;
+            }
             i = findInStudents(input, students);
             t = scanner.nextInt();
             d = scanner.nextInt();
             input = scanner.next();
             here = !input.equals("NOT_HERE");
             j = findInTimesOfClasses(t, d, timesOfClasses,dates);
-            table[i + 1][j] = here ? "1" : "-1";
+            if (j != -1) {
+                table[i + 1][j] = here ? "1" : "-1";
+            }
         }
     }
 
     private static void printTable(String[][] table, String[] students) {
         int len;
-        for (int l = 0; l < 10; ++l) {
+        for (int l = 0; l < MAX_COUNT; ++l) {
             if (l != 0) {
                 if (students[l - 1] == null) {
                     l++;
@@ -89,7 +95,7 @@ public class Program {
             else {
                 System.out.print("          ");
             }
-            for (int k = 0; k < 10; ++k) {
+            for (int k = 0; k < MAX_COUNT; ++k) {
                 if (table[l][k] != null) {
                     len = table[l][k].length();
                     while (table[0][k].length() - len != 0) {
@@ -101,14 +107,18 @@ public class Program {
                 }
                 else {
                     int until;
-                    if (table[0][k] == null)
+                    if (table[0][k] == null) {
                         until = 0;
-                    else
+                    }
+                    else {
                         until = table[0][k].length();
-                    for (int x = 0; x < until; ++x)
+                    }
+                    for (int x = 0; x < until; ++x) {
                         System.out.print(" ");
-                    if (until != 0)
+                    }
+                    if (until != 0) {
                         System.out.print("|");
+                    }
                 }
             }
             System.out.print("\n");
@@ -116,9 +126,10 @@ public class Program {
     }
 
     private static int findInDays(String day) {
-        for (int i = 0; i < 7; ++i) {
-            if (day.equals(Days[i]))
+        for (int i = 0; i < DAY_IN_WEEK; ++i) {
+            if (day.equals(Days[i])) {
                 return i;
+            }
         }
         return -1;
     }
@@ -128,16 +139,25 @@ public class Program {
         int    timeBuf;
 
         int n = count;
-        for (int i = 0; i < n-1; i++)
-            for (int j = 0; j < n-i-1; j++)
-                if (findInDays(days[i]) > findInDays(days[i+1]) && times[i] > times[i + 1]){
-                    timeBuf = times[i];
-                    buf = days[i];
-                    times[i] = times[i + 1];
-                    days[i] = days[i + 1];
-                    times[i + 1] = timeBuf;
-                    days[i + 1] = buf;
+        int fir, sec, t1, t2;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                fir = findInDays(days[j]);
+                sec = findInDays(days[j + 1]);
+                t1 = times[j];
+                t2 = times[j + 1];
+                if (fir > sec || (fir == sec && t1 > t2)) {
+                    timeBuf = times[j];
+                    buf = days[j];
+
+                    times[j] = times[j + 1];
+                    days[j] = days[j + 1];
+
+                    times[j + 1] = timeBuf;
+                    days[j + 1] = buf;
                 }
+            }
+        }
     }
 
     private static void fillTable(int[] times, String[] days, String[][] table, int count, int[] dates, int[] timesOfClasses) {
@@ -146,10 +166,11 @@ public class Program {
         String tmp;
         for (int k = 0; k < 5; ++k) {
             for (int i = 0; i < count; ++i) {
-                if (j > 9)
+                if (j > 9) {
                     break;
+                }
                 int l = findInDays(days[i]);
-                date = k * 7 + l;
+                date = k * DAY_IN_WEEK + l;
                 if (date != 0 && date < 31) {
                     dates[j] = date;
                     timesOfClasses[j] = times[i];
@@ -163,10 +184,11 @@ public class Program {
 
     private static void scanStudents(Scanner scanner, String[] students) {
         String input;
-        for (int i = 0; i < 11; ++i) {
+        for (int i = 0; i < MAX_COUNT + 1; ++i) {
             input = scanner.nextLine();
-            if (input.equals("."))
+            if (input.equals(".")) {
                 break;
+            }
             students[i] = input;
         }
     }
@@ -182,8 +204,9 @@ public class Program {
                 times[index] = time;
             } else {
                 input = scanner.next();
-                if (input.equals("."))
+                if (input.equals(".")) {
                     break;
+                }
                 days[index] = input;
                 index++;
             }
@@ -191,3 +214,4 @@ public class Program {
         return index;
     }
 }
+

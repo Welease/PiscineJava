@@ -1,11 +1,14 @@
 import java.util.Scanner;
 
 public class Program {
+    private static final String EOF = "42";
+    private static final int MAX = 18;
+
     public static void printGraphic(long info) {
         long mark;
         int i = 1;
 
-        while (info > 0){
+        while (info > 0) {
             mark = info % 10;
             System.out.print("Week " + i + " ");
             while (mark > 0){
@@ -27,19 +30,27 @@ public class Program {
 
         week = scanner.next();
 
-        if (week.equals("42")) System.exit(1);
+        if (week.equals(EOF)) {
+            System.exit(1);
+        }
 
         numOfWeek = scanner.nextInt();
 
-        while (i <= 18){
-            if (numOfWeek != i) ilArgExit();
+        while (i <= MAX) {
+            if (numOfWeek != i) {
+                ilArgExit();
+            }
             tmp = readWeeksData(scanner);
             marks = marks * 10 + tmp;
             week = scanner.next();
-            if (week.equals("42")) break;
+            if (week.equals(EOF)) {
+                break;
+            }
             tmpNumOfWeek = numOfWeek;
             numOfWeek = scanner.nextInt();
-            if (tmpNumOfWeek > numOfWeek) ilArgExit();
+            if (tmpNumOfWeek > numOfWeek) {
+                ilArgExit();
+            }
             i++;
         }
 
@@ -52,17 +63,20 @@ public class Program {
 
         while (i++ < 5) {
             num = scan.nextInt();
-            if (num > 9) ilArgExit();
-            if (num < min) min = num;
+            if (num > 9) {
+                ilArgExit();
+            }
+            if (num < min) {
+                min = num;
+            }
         }
-
         return (min);
     }
 
     public static long reverse(long num){
         long newNum = 0;
 
-        while (num > 0){
+        while (num > 0) {
             newNum = (newNum * 10) + num % 10;
             num /= 10;
         }

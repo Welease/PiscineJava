@@ -9,7 +9,9 @@ public class Program {
 		} catch (Exception ex) {
 			ilArgExit();
 		}
-        if (n < 2) ilArgExit();
+        if (n < 2) {
+            ilArgExit();
+        }
         int count = 1, i = 2;
         while (i * i <= n)  {
             if (n % i++ == 0)  {

@@ -1,15 +1,18 @@
 import java.util.Scanner;
 
 public class Program {
+    public static final int EOF = 42;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         long inputNum;
         long counter = 0;
         do {
             inputNum = scanner.nextLong();
-            if (isCoffeeRequest(inputNum))
+            if (isCoffeeRequest(inputNum)) {
                 counter++;
-        } while (inputNum != 42);
+            }
+        } while (inputNum != EOF);
         System.out.print("Count of coffee-request - ");
         System.out.println(counter);
     }
@@ -28,20 +31,25 @@ public class Program {
         long i = 2;
         long sumOfDigits = sumOfDigits(num);
         long until = ft_sqrt(sumOfDigits);
-        if (num == 0)
+        if (num == 0) {
             return false;
-        for (; i <= until; ++i)
-            if (sumOfDigits % i == 0)
+        }
+        for (; i <= until; ++i) {
+            if (sumOfDigits % i == 0) {
                 return false;
+            }
+        }
         return true;
     }
 
     private static int ft_sqrt(long num) {
         double sqrtRes = 1.0;
-        for (long i = 1; i <= 10; i++)
-            sqrtRes -= (sqrtRes*sqrtRes - num) / (2*sqrtRes);
-        if (sqrtRes % 1 > 0.5)
+        for (long i = 1; i <= 10; i++) {
+            sqrtRes -= (sqrtRes * sqrtRes - num) / (2 * sqrtRes);
+        }
+        if (sqrtRes % 1 > 0.5) {
             sqrtRes += 1;
+        }
         return (int) sqrtRes;
     }
 }

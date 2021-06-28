@@ -4,19 +4,21 @@ public class Program {
 
     private final static int COLUMN = 10;
     private final static int LINE = 12;
+    private final static int ALP_COUNT = 65535;
 
     public static void main(String[] args) {
         int countOfDifChars = 0;
         char [] symbols;
-        int [] alphabet = new int[65535];
+        int [] alphabet = new int[ALP_COUNT];
         int maxValue;
 
         Scanner scanner = new Scanner(System.in);
         String inputString = scanner.nextLine();
         symbols = inputString.toCharArray();
         for (int i = 0; i < symbols.length; ++i) {
-            if (alphabet[symbols[i]] == 0)
+            if (alphabet[symbols[i]] == 0) {
                 countOfDifChars++;
+            }
             alphabet[symbols[i]] += 1;
         }
 
@@ -71,18 +73,22 @@ public class Program {
         maxValueOfOcc += 2;
         for (int i = 0; i < 12; ++i) {
             for (int j = COLUMN - 1; j >= 0; --j) {
-                if (k1 + j >= charArray.length)
+                if (k1 + j >= charArray.length) {
                     continue;
+                }
                 int tmp = intArray[j + k1] * 10 / maxValue;
                 int until = i >= (11 - tmp) ? maxValueOfOcc : (maxValueOfOcc - countOfDis(resultMap[i][j]) + 1);
-                if (resultMap[i][j] == 0)
+                if (resultMap[i][j] == 0) {
                     until = maxValueOfOcc;
-                for (int k = 0; k < until ; ++k)
+                }
+                for (int k = 0; k < until ; ++k) {
                     System.out.print(" ");
+                }
                 if (i >= 11 - tmp) {
                     System.out.print((char) (resultMap[i][j]));
-                } else
+                } else {
                     System.out.print(resultMap[i][j] != 0 ? resultMap[i][j] : " ");
+                }
             }
             System.out.print("\n");
         }
@@ -149,10 +155,9 @@ public class Program {
             i++;
             num /= 10;
         }
-        if (num == 0)
+        if (num == 0) {
             return 0;
+        }
         return i + 1;
     }
 }
-
-//"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSSSSSSSSSSSSSDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDWEWWKFKKDKKDSKAKLSLDKSKALLLLLLLLLLRTRTETWTWWWWWWWWWWOOOOOOO"
