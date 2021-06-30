@@ -7,7 +7,7 @@ public class Program {
     }
 
     public static void main(String[] args) {
-        if (args.length == 0) {
+        if (args.length != 1) {
             wrongInputExit();
         }
         if (args[0].startsWith("--count=")) {
