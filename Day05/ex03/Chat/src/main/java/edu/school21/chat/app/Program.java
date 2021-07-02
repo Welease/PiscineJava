@@ -1,0 +1,60 @@
+package edu.school21.chat.app;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import edu.school21.chat.repositories.MessagesRepository;
+import edu.school21.chat.repositories.MessagesRepositoryJdbcImpl;
+
+import edu.school21.chat.models.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.*;
+import java.util.Scanner;
+import java.util.Optional;
+
+public class Program {
+    public static void CreateTables(HikariDataSource ds) throws SQLException, IOException {
+        String readed = new String(Files.readAllBytes(Paths.get("src/main/resources/schema.sql")));
+        PreparedStatement pst ;
+        Connection con = ds.getConnection();
+        pst = con.prepareStatement(readed);
+        pst.executeUpdate();
+    }
+
+    public static void FillTheBase(HikariDataSource ds) throws SQLException, IOException {
+        String readed = new String(Files.readAllBytes(Paths.get("src/main/resources/data.sql")));
+        PreparedStatement pst ;
+        Connection con = ds.getConnection();
+        pst = con.prepareStatement(readed);
+        pst.executeUpdate();
+    }
+
+    public static HikariDataSource getds() throws SQLException, IOException {
+        HikariConfig config = new HikariConfig();
+        config.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
+        config.setUsername("postgres");
+        config.setPassword("postgres");
+        config.addDataSourceProperty("databaseName", "ex01");
+        config.addDataSourceProperty("serverName", "127.0.0.1");
+        HikariDataSource ds = new HikariDataSource(config);
+        return ds;
+    }
+
+    public static void main (String[] args) throws SQLException, IOException {
+        HikariDataSource ds = getds();
+
+//        CreateTables(ds);
+//        FillTheBase(ds);
+        MessagesRepository messagesRepository = new MessagesRepositoryJdbcImpl(ds);
+        Optional<Message> messageOptional = messagesRepository.findById(10L);
+        if (messageOptional.isPresent()) {
+            Message message = messageOptional.get();
+            message.setText("new message");
+            message.setDateTime(null);
+            messagesRepository.update(message);
+        }
+    }
+}

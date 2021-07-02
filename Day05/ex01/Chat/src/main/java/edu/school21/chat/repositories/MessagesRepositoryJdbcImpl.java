@@ -21,16 +21,6 @@ public class MessagesRepositoryJdbcImpl implements MessagesRepository {
         this.dataSource = dataSource;
     }
 
-    private List<Chatroom> getCreatedRooms(long ownerID, Connection connection) throws SQLException {
-        List<Chatroom> chatroomList = new ArrayList<>();
-        Statement statement = connection.createStatement();
-        ResultSet roomQuery = statement.executeQuery("SELECT * FROM users WHERE id = " + ownerID + ";");
-        if (roomQuery.next()) {
-            chatroomList.add(new Chatroom(roomQuery.getLong("ownerID"), roomQuery.getString("name_"), null, null));
-        }
-        return chatroomList;
-    }
-
     @Override
     public Optional<Message> findById(Long id) throws SQLException {
         Long            author = 0L;
